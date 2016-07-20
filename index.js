@@ -91,7 +91,7 @@ var proxy = httpProxy.createProxyServer({
 });
 
 var app = express();
-app.use(express.basicAuth(‘user’, 'secret'));
+app.use(express.basicAuth('user', 'secret'));
 app.use(bodyParser.raw({type: '*/*'}));
 app.use(getcreds);
 app.use(function (req, res) {
