@@ -30,6 +30,12 @@ var yargs = require('yargs')
         describe: 'the region of the Elasticsearch cluster',
         type: 'string'
     })
+    .option('a', {
+        alias: 'auth',
+        demand: false,
+        describe: "the user pass for auth eg. user:secret",
+        type: 'string'
+    })
     .help()
     .version()
     .strict();
@@ -63,6 +69,7 @@ if (!TARGET.match(/^https?:\/\//)) {
 
 var BIND_ADDRESS = argv.b;
 var PORT = argv.p;
+var AUTH = argv.a;
 
 var creds;
 var chain = new AWS.CredentialProviderChain();
@@ -84,6 +91,7 @@ var proxy = httpProxy.createProxyServer({
 });
 
 var app = express();
+app.use(express.basicAuth(‘user’, 'secret'));
 app.use(bodyParser.raw({type: '*/*'}));
 app.use(getcreds);
 app.use(function (req, res) {
